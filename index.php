@@ -1,18 +1,34 @@
 <?php
     require "config.php";
+    $updatebutton = false;
+    $id = 0;
     if(isset($_POST['submit'])){
         $task = $_POST['task'];
-
         $query = mysqli_query($conn,"INSERT INTO tasks(task) VALUES('$task')");
         header('Location:index.php');
-
     }
     $query2 = mysqli_query($conn,"SELECT * FROM tasks");
     if(isset($_GET['del_task'])){
         $id = $_GET['del_task'];
         $query3 = mysqli_query($conn,"DELETE FROM tasks where id = $id");
         header('Location:index.php');
+    }   
+    if(isset($_GET['update_task'])){
+        $id = $_GET['update_task'];
+        $query4 = mysqli_query($conn,"SELECT * FROM tasks WHERE id = $id");
+        $row = mysqli_fetch_array($query4);
+        $updatedtask = $row['task'];
+        $updatebutton = true;
     }
+    else{
+        $updatedtask = "";
+    }
+    if(isset($_POST['update'])){
+        $id = $_POST['id'];
+        $task = $_POST['task'];
+        $query5 = mysqli_query($conn,"UPDATE tasks SET task = '$task' WHERE id = $id");
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +45,19 @@
             <h3>Todo List</h3>
         </header>
         <form action="index.php" autocomplete="off" method="POST">
-            <input type="text" name="task" required><br>
-            <button type="submit" name="submit">Add Task</button>
+            <input type="hidden" name = "id" value="<?=$id?>"/>
+            <input type="text" name="task" value = "<?=$updatedtask?>" required><br>
+            <?php
+            if($updatebutton == true){?>
+                <button type="submit" name="update">Update</button>
+            <?php 
+            }else{
+            ?>
+                <button type="submit" name="submit">Add Task</button>
+            <?php
+            }
+            ?>
+            
         </form>
         <table>
             <thead>
@@ -50,6 +77,9 @@
                     <td class="task"><?=$row['task']?></td>
                     <td class="delete">
                         <a href="index.php?del_task=<?=$row['id']?>">X</a>
+                    </td>
+                    <td class="update">
+                        <a href="index.php?update_task=<?=$row['id']?>">Edit</a>
                     </td>
                 </tr>
                 <?php

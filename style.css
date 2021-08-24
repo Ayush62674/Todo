@@ -83,3 +83,13 @@ tbody tr:hover{
     border-radius: 3px;
     border: none;
 }
+.update{
+    text-align: center;
+}
+.update a{
+    text-decoration: none;
+    color: rgb(17, 130, 206);
+    font-size: 18px;
+    letter-spacing: 2px; 
+    font-weight: 600;   
+}
