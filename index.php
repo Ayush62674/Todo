@@ -3,7 +3,7 @@
     if(isset($_POST['submit'])){
         $task = $_POST['task'];
 
-        $query = mysqli_query($conn,"INSERT INTO tasks VALUES('','$task')");
+        $query = mysqli_query($conn,"INSERT INTO tasks(task) VALUES('$task')");
         header('Location:index.php');
 
     }
